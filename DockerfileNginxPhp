@@ -1,0 +1,18 @@
+FROM ubuntu:latest
+ENV MY_VAR MY_VALUE
+
+RUN apt update
+RUN apt install -y php-fpm 
+#FROM nginx:latest
+RUN apt install -y nginx
+WORKDIR /etc/nginx/sites-available/
+COPY default .
+RUN mkdir -p /var/www/default
+
+RUN rm -Rf /etc/nginx/conf.d/default.conf 
+RUN ln -s /etc/nginx/sites-available/default /var/www/default/nginx_conf.txt
+RUN ln -s /etc/nginx/sites-available/default /etc/nginx/conf.d/default.conf
+WORKDIR /var/www/default
+COPY /www_test .
+WORKDIR /root
+CMD ["/bin/bash", "-c", "/usr/sbin/service php7.4-fpm start && nginx -g 'daemon off;'"]
