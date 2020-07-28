@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  alfa:
+    depends_on:
+      - beta
+      - gamma
+    image: nginx
+#    command: ["/bin/sleep", "10000"]
+    volumes:
+      - volume_one:/data
+    ports:
+      - "8041:80"      
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  beta:
+    depends_on:
+      - gamma      
+    image: alpine
+    command: ["/bin/sleep", "10000"]
+    networks:
+      betta:
+        aliases:
+          - altbetta
+    volumes:
+      - type: volume
+        source: volume_one
+        target: /data
+        read_only: true
+        volume:
+          nocopy: true
+ 
+  gamma:
+    image: alpine
+    command: ["/bin/sleep", "10000"]
+    networks:
+      - betta
+    volumes:
+      - type: tmpfs
+        target: /tmp
+
+
+networks:
+  betta:
+volumes:
+  volume_one:
