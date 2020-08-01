@@ -11,10 +11,11 @@ services:
     ports:
       - "8041:80"      
     logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
+      driver: "none"
+#      driver: "json-file"
+#      options:
+#        max-size: "200k"
+#        max-file: "10"
   beta:
     depends_on:
       - gamma      
